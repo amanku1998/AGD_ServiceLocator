@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ServiceLocator.UI
 {
-    public class MonkeyImageHandler : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler
+    public class MonkeyImageHandler : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
     {
         private Image monkeyImage;
         private MonkeyCellController owner;
@@ -54,6 +54,16 @@ namespace ServiceLocator.UI
         public void OnPointerDown(PointerEventData eventData)
         {
             monkeyImage.color = new Color(1f, 1f, 1f, 0.6f); // Set transparency to 50% on pointer down
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            ResetMonkeyImageColor();
+        }
+
+        private void ResetMonkeyImageColor() 
+        { 
+            monkeyImage.color = new Color(1, 1, 1, 1f); 
         }
     }
 }
