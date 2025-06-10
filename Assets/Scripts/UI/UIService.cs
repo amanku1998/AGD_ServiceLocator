@@ -11,7 +11,6 @@ namespace ServiceLocator.UI
 {
     public class UIService : GenericMonoSingleton<UIService>
     {
-        [SerializeField] private EventService eventService;
         [SerializeField] private WaveService waveService;
 
         [Header("Gameplay Panel")]
@@ -56,7 +55,7 @@ namespace ServiceLocator.UI
             SubscribeToEvents();
         }
 
-        public void SubscribeToEvents() => eventService.OnMapSelected.AddListener(OnMapSelected);
+        public void SubscribeToEvents() => EventService.Instance.OnMapSelected.AddListener(OnMapSelected);
 
         public void OnMapSelected(int mapID)
         {
