@@ -8,6 +8,7 @@ namespace ServiceLocator.Player.Projectile
     {
         private ProjectileView projectileView;
         private ProjectileScriptableObject projectileScriptableObject;
+        private PlayerService playerService;
 
         private BloonController target;
         private ProjectileState currentState;
@@ -18,12 +19,18 @@ namespace ServiceLocator.Player.Projectile
             projectileView.SetController(this);
         }
 
-        public void Init(ProjectileScriptableObject projectileScriptableObject)
+        public void Init(ProjectileScriptableObject projectileScriptableObject, PlayerService playerService)
         {
+            this.playerService = playerService;
             this.projectileScriptableObject = projectileScriptableObject;
             projectileView.SetSprite(projectileScriptableObject.Sprite);
             projectileView.gameObject.SetActive(true);
             target = null;
+        }
+
+        public PlayerService GetPlayerService()
+        {
+            return playerService;
         }
 
         public void SetPosition(Vector3 spawnPosition) => projectileView.transform.position = spawnPosition;
@@ -53,16 +60,16 @@ namespace ServiceLocator.Player.Projectile
             if (currentState == ProjectileState.ACTIVE)
             {
                 bloonHit.TakeDamage(projectileScriptableObject.Damage);
-                ResetProjectile();
+                ResetProjectile(playerService);
                 SetState(ProjectileState.HIT_TARGET);
             }
         }
 
-        public void ResetProjectile()
+        public void ResetProjectile(PlayerService playerService)
         {
             target = null;
             projectileView.gameObject.SetActive(false);
-            GameService.Instance.PlayerService.ReturnProjectileToPool(this);
+            playerService.ReturnProjectileToPool(this);
         }
 
         private void SetState(ProjectileState newState) => currentState = newState;

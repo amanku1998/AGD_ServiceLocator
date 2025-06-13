@@ -3,6 +3,7 @@ using UnityEngine;
 using ServiceLocator.Wave.Bloon;
 using ServiceLocator.Player.Projectile;
 using ServiceLocator.Main;
+using ServiceLocator.Sound;
 
 namespace ServiceLocator.Player
 {
@@ -43,12 +44,12 @@ namespace ServiceLocator.Player
 
         public bool CanAttackBloon(BloonType bloonType) => monkeyScriptableObject.AttackableBloons.Contains(bloonType);
 
-        public void UpdateMonkey()
+        public void UpdateMonkey(SoundService soundService)
         {
             if(bloonsInRange.Count > 0)
             {
                 RotateTowardsTarget(bloonsInRange[0]);
-                ShootAtTarget(bloonsInRange[0]);
+                ShootAtTarget(bloonsInRange[0], soundService);
             }
         }
 
@@ -59,7 +60,7 @@ namespace ServiceLocator.Player
             monkeyView.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
-        private void ShootAtTarget(BloonController targetBloon)
+        private void ShootAtTarget(BloonController targetBloon, SoundService soundService)
         {
             attackTimer -= Time.deltaTime;
             if(attackTimer <= 0)
@@ -67,7 +68,7 @@ namespace ServiceLocator.Player
                 ProjectileController projectile = projectilePool.GetProjectile(monkeyScriptableObject.projectileType);
                 projectile.SetPosition(monkeyView.transform.position);
                 projectile.SetTarget(targetBloon);
-                GameService.Instance.SoundService.PlaySoundEffects(Sound.SoundType.MonkeyShoot);
+                soundService.PlaySoundEffects(Sound.SoundType.MonkeyShoot);
                 ResetAttackTimer();
             }
         }

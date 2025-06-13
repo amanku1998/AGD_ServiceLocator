@@ -7,6 +7,7 @@ namespace ServiceLocator.Player.Projectile
     {
         private ProjectileController controller;
         private SpriteRenderer spriteRenderer;
+        
 
         private void Awake() => spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -15,7 +16,7 @@ namespace ServiceLocator.Player.Projectile
         private void Update()
         {
             if (ProjectileOutOfBounds())
-                controller.ResetProjectile();
+                controller.ResetProjectile(controller.GetPlayerService());
 
             controller?.UpdateProjectileMotion();
         }
